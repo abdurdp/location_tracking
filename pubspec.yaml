@@ -36,6 +36,10 @@ dependencies:
   google_maps_flutter: ^2.0.8
   shared_preferences: ^2.0.10
   permission_handler: ^11.0.1
+  flutter_local_notifications: ^9.5.3
+  notification_permissions: ^0.6.1
+  http: ^1.1.0
+  workmanager: ^0.5.2
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:workmanager/workmanager.dart';
 
-import 'map_controller.dart';class MapScreen extends StatefulWidget {
+import 'map_controller.dart';
+
+class MapScreen extends StatefulWidget {
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -10,12 +13,13 @@ import 'map_controller.dart';class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   GoogleMapController? mapController;
 
-@override
+  @override
   void initState() {
     Get.put(MapController());
     Get.find<MapController>().updateUserLocation();
     super.initState();
   }
+
   @override
   void dispose() {
     // Dispose of the GoogleMapController when the widget is disposed
@@ -33,29 +37,41 @@ class _MapScreenState extends State<MapScreen> {
         child: GetBuilder<MapController>(
           init: MapController(),
           builder: (controller) {
-            return GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(24.374, 88.60114),
-                zoom: 15.0,
-              ),
-              markers: controller.locationMarkers,
-              onMapCreated: (GoogleMapController gcontroller) {
-                // Assign the controller to the state variable
-                setState(() {
-                  mapController = gcontroller;
-                });
-                // controller.updateUserLocation();
-                mapController!.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                    new CameraPosition(
-                      target: LatLng(
-                          controller.initialLocation!.latitude ?? 0.0, controller.initialLocation!.longitude ?? 0.0),
-                      zoom: 15,
+            return Stack(children: [
+              GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(24.374, 88.60114),
+                  zoom: 15.0,
+                ),
+                markers: controller.locationMarkers,
+                onMapCreated: (GoogleMapController gcontroller) {
+                  // Assign the controller to the state variable
+                  setState(() {
+                    mapController = gcontroller;
+                  });
+                  // controller.updateUserLocation();
+                  mapController!.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      new CameraPosition(
+                        target: LatLng(
+                            controller.initialLocation!.latitude ?? 0.0,
+                            controller.initialLocation!.longitude ?? 0.0),
+                        zoom: 15,
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
+                  );
+                },
+              ),
+              Positioned(
+                bottom: 20,
+                left: 20,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Workmanager().registerOneOffTask('1', 'simpleTask');
+                    },
+                    child: Text('Start a background task')),
+              )
+            ]);
           },
         ),
       ),
@@ -65,7 +81,9 @@ class _MapScreenState extends State<MapScreen> {
             CameraUpdate.newCameraPosition(
               new CameraPosition(
                 target: LatLng(
-                    Get.find<MapController>().initialLocation!.latitude ?? 0.0, Get.find<MapController>().initialLocation!.longitude ?? 0.0),
+                    Get.find<MapController>().initialLocation!.latitude ?? 0.0,
+                    Get.find<MapController>().initialLocation!.longitude ??
+                        0.0),
                 zoom: 15,
               ),
             ),
@@ -76,6 +94,3 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
-
-

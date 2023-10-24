@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
+import 'package:location_ba_task/home_page.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'map_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,10 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.setDouble('latitude', locationData.latitude!);
         prefs.setDouble('longitude', locationData.longitude!);
       }
-
       // Navigate to the map screen after saving location data
       Future.delayed(Duration.zero, () {
-        Get.off(MapScreen());
+        Get.off(MyHomePage());
       });
     } else if (status.isDenied) {
       // Permission denied, show a message or request again
@@ -43,7 +37,6 @@ class _SplashScreenState extends State<SplashScreen> {
       // Permission permanently denied, open app settings
       openAppSettings();
     }
-
   }
 
   Future<LocationData?> _getLocation() async {
@@ -65,4 +58,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
